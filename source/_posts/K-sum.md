@@ -5,7 +5,7 @@ tags: algorithm
 ---
 前前后后折腾了好久，终于把博客搭起来了，感谢哥哥帮忙，最近的日子过的真是一言难尽，但所幸有些成长和进步虽说离最终目标还有很远，但是不要放弃，继续努力！
 
-牢骚完了，就更新一下最近一个觉得又掉绕的题，Ksum
+牢骚完了，就更新一下最近一个觉得又点绕的题，Ksum
 题目如下
 ```
 Given n distinct positive integers, integer k (k <= n) and a number target.
