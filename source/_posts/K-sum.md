@@ -1,5 +1,5 @@
 ---
-title: K-sum
+title: K-sum解题报告
 date: 2017-09-23 18:41:42
 tags: algorithm
 ---
