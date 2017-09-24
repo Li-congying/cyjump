@@ -5,7 +5,7 @@ tags: algorithm
 ---
 前前后后折腾了好久，终于把博客搭起来了，感谢哥哥帮忙，最近的日子过的真是一言难尽，但所幸有些成长和进步虽说离最终目标还有很远，但是不要放弃，继续努力！
 
-牢骚完了，就更新一下最近一个觉得又点绕的题，Ksum
+牢骚完了，就更新一下最近一个觉得又有点绕的题，Ksum
 题目如下
 ```
 Given n distinct positive integers, integer k (k <= n) and a number target.
@@ -22,16 +22,16 @@ example: Given [1,2,3,4], k=2, target=5. There are 2 solutions:
 假设我们有list=[1,2,3,4], k = 2, target = 5;   
 那么需要被缓存的内容，是这样的一组值：由k_k个元素可以组成的小于target的组合的个数。    
 
-比如我们求 两个可以组成5的，那我们在从 1 到1，2到1，2，3... 的过程中可以得到的是： 由1个元素可以组合得到1，2，3...的个数，那如果需要两个元素组合得到5，只需要根据当前元素找到 dp[k-1][target-current] 的个数就可以了。
+比如我们求 两个可以组成5的，那我们在从 1 到1，2到1，2，3... 的过程中可以得到的是： 由1个元素可以组合得到1，2，3...的个数，那如果需要两个元素组合得到5，只需要根据当前元素找到 dp[k-1][target-current] 的个数就可以了, **但是有一点很关键，就是不可以重复利用数字**，例如我们要找4，但 是不可以得到2+2=4的结果，这意味着在查找到2时，dp[1][2] 要等于0，那么如何实现这个过程呢，有点trick的感觉，**倒着找**就可以了。
 
 例如如下的计算过程
 ```
 list = [1,2,3,4]
 k = 2, target = 5
-[1] ==> dp[1][1] = 1, target-1 = 4, dp[1][4] == 0 => dp[2][5] = 0
-[1,2] ==> dp[1][2] = 1, target-2 = 3, dp[1][3] == 0 => dp[2][5] = 0
-[1,2,3] ==> dp[1][3] = 1, target-3 =2, dp[1][2] == 1=> dp[2][5] = 1
-[1,2,3,4] ==> dp[1][4] = 1, target-4 =1, dp[1][1] == 1=> dp[2][5] = 2
+[1] ==> target-1 = 4, dp[1][4] == 0 => dp[2][5] = 0，dp[1][1] = 1
+[1,2] ==>target-2 = 3, dp[1][3] == 0 => dp[2][5] = 0，dp[1][2] = 1
+[1,2,3] ==> target-3 =2, dp[1][2] == 1=> dp[2][5] = 1, dp[1][3] = 1
+[1,2,3,4] ==> target-4 =1, dp[1][1] == 1=> dp[2][5] = 2,dp[1][4] = 1
 ```
 上代码
 所以我们首先建立一个dp[k][target] 的数组，默认初始值为0
@@ -42,15 +42,13 @@ def k_sum(list, k, target):
         num = list[i]
         if num > target:
             continue
-        max_k = min(k, i+1)  # 得到可以最多组合多少个数字   
-        for kk in range(2, max_k+1): 
-            for t in range(target+1): # 从0到target计算可以得到的组合个数
+        max_k = min(k, i+1)
+        for kk in range(2, max_k+1)[::-1]: # cal 1 to mak_k's sum group
+            for t in range(target+1)[::-1]: # cal 0 to target sum
                 if num > t:
                     continue
-                #print 'kk', kk, t, num, dp[kk-1][t-num], dp[kk][t]
                 dp[kk][t] += dp[kk-1][t-num]
-
-        dp[1][num] = 1 #  放在最后是为了避免2+2=4的重复选取情况
+        dp[1][num] = 1
 
     return dp[k][target]
 ```
