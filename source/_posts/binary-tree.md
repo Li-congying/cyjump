@@ -26,6 +26,7 @@ tags: algorithm
             node_stack.append(node.left)
 ```
 <!--more-->
+
 中序遍历（左－中－右）
 ```
 递归
